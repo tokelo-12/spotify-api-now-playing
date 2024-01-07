@@ -9,8 +9,8 @@ import (
 )
 
 func RequestToken() {
-	clientID := "0c7abc41f05d4c02ac74577d01798471"
-	clientSecret := "327a0017299f42798e7c2048e4cccadc"
+	clientID := ""
+	clientSecret := ""
 
 	//prepare form data
 	var data = url.Values{}

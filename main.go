@@ -11,7 +11,7 @@ func main() {
 
 	// RequestToken()
 
-	Authorize()
+	Auth()
 
 }
 
