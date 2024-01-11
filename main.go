@@ -15,8 +15,7 @@ func main() {
 
 }
 
-func GetNowPlaying(urls string) {
-	token := "BQBTu_WH0dKt_1DHZNoD11fbF8O_AMd3e7p_dNlykyQFmborM6Hwal8Rs0PVEM6DzI7t294tzporNutCxvSRhmkWOxh4OJskN7yJZMNSrQd0V5MZN_4"
+func GetNowPlaying(urls string, token string) {
 
 	req, err := http.NewRequest("GET", urls, nil)
 
@@ -45,5 +44,5 @@ func GetNowPlaying(urls string) {
 		panic(err)
 	}
 
-	fmt.Println(string(body))
+	fmt.Print(string(body))
 }

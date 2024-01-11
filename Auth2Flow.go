@@ -35,7 +35,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		Value: state,
 		Path:  "/",
 	})
-	scope := "user-read-currently playing"
+	scope := "user-read-currently-playing"
 
 	params := url.Values{
 		"response_type": {"code"},
@@ -115,7 +115,9 @@ func callBackHandler(w http.ResponseWriter, r *http.Request) {
 	refreshToken := tokenResponse["refresh_token"].(string)
 
 	// Handle the access token and make requests as needed
+	GetNowPlaying("https://api.spotify.com/v1/me/player/currently-playing", accessToken)
 
+	//pass the tokens to the browser
 	http.Redirect(w, r, "/#"+url.Values{"access_token": {accessToken}, "refresh_token": {refreshToken}}.Encode(), http.StatusTemporaryRedirect)
 }
 
