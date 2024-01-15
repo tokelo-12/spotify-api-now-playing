@@ -8,11 +8,13 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/rs/cors"
 )
 
 const (
-	clientID     = ""
-	clientSecret = ""
+	clientID     = "2b1edb03d79e4525b6a541c3adb1927b"
+	clientSecret = "2acaf6d005a44a17a9faaddedd6acaca"
 	redirectURI  = "http://localhost:8888/callback"
 	stateKey     = "spotify_auth_state"
 	spotifyAuth  = "https://accounts.spotify.com/authorize"
@@ -115,15 +117,27 @@ func callBackHandler(w http.ResponseWriter, r *http.Request) {
 	refreshToken := tokenResponse["refresh_token"].(string)
 
 	// Handle the access token and make requests as needed
-	GetNowPlaying("https://api.spotify.com/v1/me/player/currently-playing", accessToken)
+	GetNowPlaying(w, r, accessToken)
 
 	//pass the tokens to the browser
 	http.Redirect(w, r, "/#"+url.Values{"access_token": {accessToken}, "refresh_token": {refreshToken}}.Encode(), http.StatusTemporaryRedirect)
 }
 
+var handler http.HandlerFunc = callBackHandler
+
 func Auth() {
+
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "OPTIONS"},
+		AllowedHeaders:   []string{"Content-Type"},
+		AllowCredentials: true,
+	})
+
 	http.HandleFunc("/login", LoginHandler)
-	http.HandleFunc("/callback", callBackHandler)
+
+	http.Handle("/callback", c.Handler(handler))
+
 	fmt.Println("Listening on :8888")
 	http.ListenAndServe(":8888", nil)
 }

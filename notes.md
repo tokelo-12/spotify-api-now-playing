@@ -188,6 +188,21 @@ func main() {
 ```
 
 
+### Important syntax notes
+
+In Go's net/http package, w http.ResponseWriter and r *http.Request are common parameters representing the response writer and the incoming request, respectively.
+
+	- it's an interface that allows you to write the response to the client.
+
+	- You use its methods to:
+
+	  -Set response headers: w.Header().Set("Content-Type", "text/plain")
+
+      -Write the response body: w.Write([]byte("Hello, world!"))
+	  
+	  -Set the response status code: w.WriteHeader(http.StatusOK)
+
+
 
 
 
