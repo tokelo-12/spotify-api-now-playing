@@ -130,7 +130,7 @@ func GetNowPlaying(w http.ResponseWriter, r *http.Request, token string) {
 	// fmt.Print(string(body))
 
 	// Set response headers
-	w.Header().Set("Access-Control-Allow-Origin", "*")
+	// w.Header().Set("Access-Control-Allow-Origin", "http://127.0.0.1:5500")
 	w.Header().Set("Content-Type", "application/json")
 
 	var data NowPlaying
