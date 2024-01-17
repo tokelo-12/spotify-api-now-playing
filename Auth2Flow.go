@@ -13,8 +13,8 @@ import (
 )
 
 const (
-	clientID     = "2b1edb03d79e4525b6a541c3adb1927b"
-	clientSecret = "2acaf6d005a44a17a9faaddedd6acaca"
+	clientID     = ""
+	clientSecret = ""
 	redirectURI  = "http://localhost:8888/callback"
 	stateKey     = "spotify_auth_state"
 	spotifyAuth  = "https://accounts.spotify.com/authorize"
@@ -51,6 +51,8 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	http.Redirect(w, r, authURL, http.StatusTemporaryRedirect)
 }
+
+var myToken string
 
 func callBackHandler(w http.ResponseWriter, r *http.Request) {
 
@@ -113,11 +115,12 @@ func callBackHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	accessToken := tokenResponse["access_token"].(string)
+	myToken = tokenResponse["access_token"].(string)
 	// refreshToken := tokenResponse["refresh_token"].(string)
 
 	// Handle the access token and make requests as needed
-	GetNowPlaying(w, r, accessToken)
+
+	// GetNowPlaying(w, r, accessToken)
 
 	//pass the tokens to the browser
 	// http.Redirect(w, r, "/#"+url.Values{"access_token": {accessToken}, "refresh_token": {refreshToken}}.Encode(), http.StatusTemporaryRedirect)
@@ -136,16 +139,16 @@ func Auth() {
 
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"}, // Replace with your frontend origin
-		AllowedMethods:   []string{"GET", "POST", "OPTIONS"},
+		AllowedMethods:   []string{"HEAD", "GET", "POST", "OPTIONS"},
 		AllowedHeaders:   []string{"Content-Type"},
 		AllowCredentials: true,
-		Debug:            true, // Set to false in production
+		Debug:            false, // Set to false in production
 	})
 
 	http.HandleFunc("/login", LoginHandler)
 
-	http.Handle("/callback", c.Handler(http.HandlerFunc(callBackHandler)))
-	// http.Handle("/getNowPlaying", c.Handler(http.HandlerFunc(GetNowPlaying)))
+	http.HandleFunc("/callback", callBackHandler)
+	http.Handle("/getdata", c.Handler(http.HandlerFunc(GetNowPlaying)))
 
 	http.ListenAndServe(":8888", nil)
 

@@ -1,0 +1,21 @@
+*{
+    margin: 0;
+    padding:0;
+    box-sizing: border-box;
+}
+
+main{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap:10px;
+    background-color: black;
+    color:wheat;
+}
+
+.album-art img{
+    max-height:360px;
+    max-width:360px;
+}

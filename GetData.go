@@ -93,7 +93,7 @@ type SongInfo struct {
 	AlbumArt   string `json:"album_art"`
 }
 
-func GetNowPlaying(w http.ResponseWriter, r *http.Request, token string) {
+func GetNowPlaying(w http.ResponseWriter, r *http.Request) {
 
 	urls := "https://api.spotify.com/v1/me/player/currently-playing"
 
@@ -105,7 +105,7 @@ func GetNowPlaying(w http.ResponseWriter, r *http.Request, token string) {
 	}
 
 	//set request header
-	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Authorization", "Bearer "+myToken)
 
 	//send request
 	client := &http.Client{}
@@ -130,7 +130,6 @@ func GetNowPlaying(w http.ResponseWriter, r *http.Request, token string) {
 	// fmt.Print(string(body))
 
 	// Set response headers
-	// w.Header().Set("Access-Control-Allow-Origin", "http://127.0.0.1:5500")
 	w.Header().Set("Content-Type", "application/json")
 
 	var data NowPlaying
@@ -147,11 +146,12 @@ func GetNowPlaying(w http.ResponseWriter, r *http.Request, token string) {
 	songInfo := SongInfo{
 		SongName:   data.Item.Name,
 		ArtistName: data.Item.Artists[0].Name,
-		AlbumArt:   data.Item.Album.Images[0].URL,
+		AlbumArt:   data.Item.Album.Images[2].URL,
 	}
 
 	// Send JSON response to the frontend if all data should be sent
 	// json.NewEncoder(w).Encode(data)
 
+	// w.Header().Set("Access-Control-Allow-Origin", "http://127.0.0.1:5500/")
 	json.NewEncoder(w).Encode(songInfo)
 }
