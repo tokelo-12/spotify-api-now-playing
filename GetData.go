@@ -91,6 +91,7 @@ type SongInfo struct {
 	SongName   string `json:"song_name"`
 	ArtistName string `json:"artist_name"`
 	AlbumArt   string `json:"album_art"`
+	IsPlaying  bool   `json:"is_playing"`
 }
 
 func GetNowPlaying(w http.ResponseWriter, r *http.Request) {
@@ -139,16 +140,17 @@ func GetNowPlaying(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Printf("Song Name: %s\n", data.Item.Name)
-	fmt.Printf("Artist Name: %s\n", data.Item.Artists[0].Name)
-	fmt.Printf("Album Art: %s\n", data.Item.Album.Images[0].URL)
-
 	songInfo := SongInfo{
 		SongName:   data.Item.Name,
 		ArtistName: data.Item.Artists[0].Name,
-		AlbumArt:   data.Item.Album.Images[2].URL,
+		AlbumArt:   data.Item.Album.Images[0].URL,
+		IsPlaying:  data.IsPlaying,
 	}
 
+	fmt.Printf("Song Name: %s\n", songInfo.SongName)
+	fmt.Printf("Artist Name: %s\n", songInfo.ArtistName)
+	fmt.Printf("Album Art: %s\n", songInfo.AlbumArt)
+	fmt.Printf("Currenty Playing: %v", songInfo.IsPlaying)
 	// Send JSON response to the frontend if all data should be sent
 	// json.NewEncoder(w).Encode(data)
 

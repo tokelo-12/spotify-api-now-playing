@@ -13,8 +13,8 @@ import (
 )
 
 const (
-	clientID     = ""
-	clientSecret = ""
+	clientID     = "2b1edb03d79e4525b6a541c3adb1927b"
+	clientSecret = "2acaf6d005a44a17a9faaddedd6acaca"
 	redirectURI  = "http://localhost:8888/callback"
 	stateKey     = "spotify_auth_state"
 	spotifyAuth  = "https://accounts.spotify.com/authorize"
@@ -127,18 +127,10 @@ func callBackHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
-// type corsHandler struct {
-// 	handler http.Handler
-// }
-
-// func (c *corsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-// 	c.handler.ServeHTTP(w, r)
-// }
-
 func Auth() {
 
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"*"}, // Replace with your frontend origin
+		AllowedOrigins:   []string{"http://127.0.0.1:5500"}, // Replace with your frontend origin
 		AllowedMethods:   []string{"HEAD", "GET", "POST", "OPTIONS"},
 		AllowedHeaders:   []string{"Content-Type"},
 		AllowCredentials: true,
