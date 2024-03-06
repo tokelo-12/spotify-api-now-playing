@@ -52,7 +52,9 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, authURL, http.StatusTemporaryRedirect)
 }
 
+// Global
 var myToken string
+var myRefresh string
 
 func callBackHandler(w http.ResponseWriter, r *http.Request) {
 
@@ -116,22 +118,18 @@ func callBackHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	myToken = tokenResponse["access_token"].(string)
-	// refreshToken := tokenResponse["refresh_token"].(string)
+	myRefresh = tokenResponse["refresh_token"].(string)
 
-	// Handle the access token and make requests as needed
-
-	// GetNowPlaying(w, r, accessToken)
-
-	//pass the tokens to the browser
-	// http.Redirect(w, r, "/#"+url.Values{"access_token": {accessToken}, "refresh_token": {refreshToken}}.Encode(), http.StatusTemporaryRedirect)
+	// pass the tokens to the browser
+	// http.Redirect(w, r, "/#"+url.Values{"access_token": {myToken}, "refresh_token": {refreshToken}}.Encode(), http.StatusTemporaryRedirect)
 
 }
 
 func Auth() {
 
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://127.0.0.1:5500"}, // Replace with your frontend origin
-		AllowedMethods:   []string{"HEAD", "GET", "POST", "OPTIONS"},
+		AllowedOrigins:   []string{"http://localhost:5173"},
+		AllowedMethods:   []string{"GET"},
 		AllowedHeaders:   []string{"Content-Type"},
 		AllowCredentials: true,
 		Debug:            false, // Set to false in production
@@ -142,7 +140,7 @@ func Auth() {
 	http.HandleFunc("/callback", callBackHandler)
 	http.Handle("/getdata", c.Handler(http.HandlerFunc(GetNowPlaying)))
 
+	fmt.Println("Listening on :8888")
 	http.ListenAndServe(":8888", nil)
 
-	fmt.Println("Listening on :8888")
 }

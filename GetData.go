@@ -1,10 +1,13 @@
 package main
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
+	"strings"
 )
 
 type ExternalUrls struct {
@@ -101,6 +104,7 @@ func GetNowPlaying(w http.ResponseWriter, r *http.Request) {
 	req, err := http.NewRequest("GET", urls, nil)
 
 	if err != nil {
+
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -147,13 +151,61 @@ func GetNowPlaying(w http.ResponseWriter, r *http.Request) {
 		IsPlaying:  data.IsPlaying,
 	}
 
-	fmt.Printf("Song Name: %s\n", songInfo.SongName)
+	fmt.Printf("\nSong Name: %s\n", songInfo.SongName)
 	fmt.Printf("Artist Name: %s\n", songInfo.ArtistName)
 	fmt.Printf("Album Art: %s\n", songInfo.AlbumArt)
-	fmt.Printf("Currenty Playing: %v", songInfo.IsPlaying)
+	fmt.Printf("Currenty Playing: %v\n", songInfo.IsPlaying)
 	// Send JSON response to the frontend if all data should be sent
 	// json.NewEncoder(w).Encode(data)
 
 	// w.Header().Set("Access-Control-Allow-Origin", "http://127.0.0.1:5500/")
 	json.NewEncoder(w).Encode(songInfo)
+
+	//send post request to refresh access token
+
+	Options := url.Values{
+		"grant_type":    {"refresh_token"},
+		"refresh_token": {myRefresh},
+	}
+
+	refreshRequest, err := http.NewRequest("POST", "https://accounts.spotify.com/api/token", strings.NewReader(Options.Encode()))
+
+	if err != nil {
+		http.Redirect(w, r, "/#"+url.Values{"error": {"internal_error"}}.Encode(), http.StatusTemporaryRedirect)
+		return
+	}
+
+	refreshRequest.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
+	refreshRequest.Header.Set("Authorization", "Basic "+base64.StdEncoding.EncodeToString([]byte(clientID+":"+clientSecret)))
+
+	//send request
+	refreshClient := &http.Client{}
+
+	refreshResponse, err := refreshClient.Do(refreshRequest)
+
+	if err != nil {
+		http.Redirect(w, r, "/#"+url.Values{"error": {"internal_error"}}.Encode(), http.StatusTemporaryRedirect)
+		return
+	}
+
+	defer refreshResponse.Body.Close()
+
+	if refreshResponse.StatusCode != http.StatusOK {
+		http.Redirect(w, r, "/#"+url.Values{"error": {"invalid_token"}}.Encode(), http.StatusTemporaryRedirect)
+		return
+	}
+
+	//parse response body
+	var requestRes map[string]interface{}
+	err = json.NewDecoder(refreshResponse.Body).Decode(&requestRes)
+
+	if err != nil {
+		http.Redirect(w, r, "/#"+url.Values{"error": {"invalid_token"}}.Encode(), http.StatusTemporaryRedirect)
+		return
+	}
+	// fmt.Println(requestRes)
+
+	myToken = requestRes["access_token"].(string)
+
 }
