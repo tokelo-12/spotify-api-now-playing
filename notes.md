@@ -208,6 +208,8 @@ To check remote url origin
 	- git remote get-url origin
 	- git remote show origin
 
+To set a new remote origin
+	- git remote set-url origin <url>
 
 
 

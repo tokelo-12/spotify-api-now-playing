@@ -13,8 +13,8 @@ import (
 )
 
 const (
-	clientID     = "2b1edb03d79e4525b6a541c3adb1927b"
-	clientSecret = "2acaf6d005a44a17a9faaddedd6acaca"
+	clientID     = ""
+	clientSecret = ""
 	redirectURI  = "http://localhost:8888/callback"
 	stateKey     = "spotify_auth_state"
 	spotifyAuth  = "https://accounts.spotify.com/authorize"
