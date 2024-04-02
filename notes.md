@@ -202,6 +202,12 @@ In Go's net/http package, w http.ResponseWriter and r *http.Request are common p
 	  
 	  -Set the response status code: w.WriteHeader(http.StatusOK)
 
+### Git notes
+
+To check remote url origin 
+	- git remote get-url origin
+	- git remote show origin
+
 
 
 
