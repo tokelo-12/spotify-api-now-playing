@@ -1,12 +1,17 @@
 # A GO server that uses the Spotify API to get a user's currently playing track
 ### Prerequisites:
   - A spotify account
-  - Create an app in the Spotify account to obtain data crucial to running the app.
+  - Create an app in the Spotify account to obtain secret and id.
 
 ## Demo
 
 
+![](https://github.com/tokelo-12/spotify-api-now-playing/blob/main/Untitled%20design%20(1).gif)
 
+
+## Screenshot server log
+
+![](https://github.com/tokelo-12/spotify-api-now-playing/blob/main/Screenshot%20from%202025-04-04%2002-44-53.png)
 
 ### Here is a breakdown of the code :
 
