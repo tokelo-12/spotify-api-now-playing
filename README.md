@@ -2,24 +2,30 @@
 ### Prerequisites:
   - A spotify account
   - Create an app in the Spotify account to obtain data crucial to running the app.
+
+## Demo
+
+
+
+
 ### Here is a breakdown of the code :
 
 ## 1. Get Authourized
 - Authourization begins in Auth2Flow.go file in the LoginHandler func
-  ```
+  ```go
   func LoginHandler(){
     //code
   }
 
 ## 2. Make Request
 - After authourization, making api requests is now possible, this is done in the Getdata.go file inside the GetNowPlaying function.
-```
+```go
 func GetNowPlaying(){
 //code
 }
 ```
 - A struct called SongInfo is created to filter the json to just the parameters desired. Alternatively you can remove this step and sift through all the JSON data recieved.
-```
+```go
 type SongInfo struct {
 	SongName   string `json:"song_name"`
 	ArtistName string `json:"artist_name"`
@@ -32,7 +38,7 @@ type SongInfo struct {
 ## 3. Run Server
   
 - Finally the server can be launched with previously mentioned functions as endpoints in the Auth2Flow.go file inside the Auth function.
-```
+```go
 func Auth(){
 
  //code
