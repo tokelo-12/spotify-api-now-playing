@@ -51,6 +51,6 @@ func Auth(){
 }
 ```
 
-- Run the program by running ` go run main.go Auth2Flow.go Getdata.go ` in the terminal
+- Run the program by running ` go run . ` in the terminal
 
 - Remember to run sequentially starting with the ` :8888/login ` endpoint then the ` :8888/getdata ` endpoint in the browser.
